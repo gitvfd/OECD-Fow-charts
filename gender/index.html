@@ -12,9 +12,8 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
  <script src="libs/d3.v4.min.js"></script>
 	<script src="libs/d3.v4.jetpack.min.js"></script>
-	<script src="libs/topojson.v1.min.js"></script>
 	<script src="libs/d3-queue.v3.min.js"></script>
-	<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script><script src="//unpkg.com/topojson@3"></script>
+
 
 </head>
 
@@ -48,6 +47,12 @@
 	    data:"data/data.tsv"
 	};
 
+
+	var divMap = d3.select("body").append("div")
+		.attr("class", "tooltip")
+		.style("opacity", 0);
+
+
     var format = d3.format(",.1f");
     var margin = 20,centered;
 
@@ -61,19 +66,17 @@
   	    .attr("width", width)
   	    .attr("height", height )
 
-    var chart=svg.append("g");
+	var baseline=svg.append("g");
+
+	var chart=svg.append("g");
+	
     var annotationLayer=svg.append("g");
 
 	var data=[];
 
 
-	//start legend
-	//end legend
-
-
-	var divMap = d3.select("body").append("div")
-		.attr("class", "tooltip")
-		.style("opacity", 0);
+	var y = d3.scaleLinear()
+		.rangeRound([3*margin, height-1*margin]);
 
 	d3.queue()
 	    .defer(d3.tsv, urls.data)
@@ -111,12 +114,223 @@
 		data=dataTemp;
 		setDropdown(dataTemp)
 		
+		//define min and max value for axis
+		var min= d3.min(data,function(d){return parseFloat(d.Value)})
+  		var max= d3.max(data,function(d){return parseFloat(d.Value)})
+  console.log(min)
+  console.log(max)
+		y.domain([max,min])
 
-	      
+		//Draw Axis
+		baseline.append("line")
+			.attr("id","axis2000")
+			.attr("x1",0.25*width)
+			.attr("y1",3*margin)
+			.attr("x2",0.25*width)
+			.attr("y2",height-margin)
+	      	.style("stroke", "#22222B")
+			  .style("stroke-width","1.5px");
+			  
+		
+		baseline.append("line")
+			.attr("id","axis2018")
+			.attr("x1",0.75*width)
+			.attr("y1",3*margin)
+			.attr("x2",0.75*width)
+			.attr("y2",height-margin)
+	      	.style("stroke", "#22222B")
+	      	.style("stroke-width","1.5px");
+	
+		baseline.append("text")
+			.attr("id","axistext2000")
+			.attr("dx",0.25*width)
+			.attr("dy",2*margin)
+			.style("font-weight",700)
+			.style("text-anchor","middle")
+			.text("2000")
+		
+		baseline.append("text")
+			.attr("id","axistext2018")
+			.attr("dx",0.75*width)
+			.attr("dy",2*margin)
+			.style("font-weight",700)
+			.style("text-anchor","middle")
+			.text("2018")
+			  
+		var circleGroup = chart.selectAll("g")
+		    .data(data)
+		    .enter()
+		    .append("g")
+			  .filter(function(d) { return d.jobs=="Doctors"})
+			  
+
+		circleGroup.append("line")
+			.attr("class","joinLine")
+			.attr("x1",0.25*width)
+			.attr("y1",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Boys2000"})[0].Value))
+			.attr("x2",0.75*width)
+			.attr("y2",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Boys2018"})[0].Value))
+	      	.style("stroke", "#788393")
+			  .style("stroke-width","2px");
+			  
+		circleGroup.append("line")
+			.attr("class","joinLine")
+			.attr("x1",0.25*width)
+			.attr("y1",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Girls2000"})[0].Value))
+			.attr("x2",0.75*width)
+			.attr("y2",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Girls2018"})[0].Value))
+	      	.style("stroke", "#95E22E")
+			  .style("stroke-width","2px");
+		
+	   circleGroup.append("circle")
+		    .attr("cx",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+					return 0.25*width;
+				else
+					return 0.75*width
+			})
+			.attr("cy",function(d){
+				return (y(d.Value))
+			})
+			
+			.attr("r", function(d){
+					return 12;
+			})
+			.style("fill",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Girls2018")
+					return "#95E22E";
+				else
+					return "#788393";
+			})  
+
+		circleGroup.append("text")
+			.attr("class","label")
+			.attr("dx", function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+					return 0.25*width-20;
+				else
+					return 0.75*width+20;
+			})
+			.attr("dy",function(d){
+				return (y(d.Value))+3
+			})
+			.style("font-weight",300)
+			.style("text-anchor",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+				    		return  "end";
+					else 
+							return  "start"; 	
+			})
+			.text(function(d){
+							return  d.Value;		
+		  })
+		  
+		chart.append("svg:image")
+			.attr("class","icon")
+			.attr("xlink:href", "boys.svg")
+			.attr("width", 050)
+			.attr("x", 0.25*width-100)
+			.attr("y",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Boys2000"})[0].Value)-25)
+			.style("stroke","#788393"); 
+		
+		chart.append("svg:image")
+			.attr("class","icon")
+			.attr("xlink:href", "girls.svg")
+			.attr("width", 40)
+			.attr("x", 0.75*width+60)
+			.attr("y",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Girls2018"})[0].Value)-25)
+			.style("stroke","#95E22E"); 
+
 	};
 
-	function update(countrySel){
+	function update(jobSel){
 
+		chart.selectAll('g').remove()
+
+		chart.selectAll('.icon').remove()
+		var circleGroup = chart.selectAll("g")
+		    .data(data)
+		    .enter()
+		    .append("g")
+      		.filter(function(d) { return d.jobs==jobSel})
+		
+
+		circleGroup.append("line")
+			.attr("class","joinLine")
+			.attr("x1",0.25*width)
+			.attr("y1",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Boys2000"})[0].Value))
+			.attr("x2",0.75*width)
+			.attr("y2",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Boys2018"})[0].Value))
+	      	.style("stroke", "#788393")
+			  .style("stroke-width","2px");
+			  
+		circleGroup.append("line")
+			.attr("class","joinLine")
+			.attr("x1",0.25*width)
+			.attr("y1",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Girls2000"})[0].Value))
+			.attr("x2",0.75*width)
+			.attr("y2",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Girls2018"})[0].Value))
+	      	.style("stroke", "#95E22E")
+			  .style("stroke-width","2px");
+	 
+		circleGroup.append("circle")
+		    .attr("cx",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+					return 0.25*width;
+				else
+					return 0.75*width
+			})
+			.attr("cy",function(d){
+				return (y(d.Value))
+			})
+			
+			.attr("r", function(d){
+					return 12;
+			})
+			.style("fill",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Girls2018")
+					return "#95E22E";
+				else
+					return "#788393";
+			})  
+		circleGroup.append("text")
+			.attr("class","label")
+			.attr("dx", function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+					return 0.25*width-20;
+				else
+					return 0.75*width+20;
+			})
+			.attr("dy",function(d){
+				return (y(d.Value))+3
+			})
+			.style("font-weight",300)
+			.style("text-anchor",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+				    		return  "end";
+					else 
+							return  "start"; 	
+			})
+			.text(function(d){
+							return  d.Value;		
+		  })
+
+
+		chart.append("svg:image")
+			.attr("class","icon")
+			.attr("xlink:href", "boys.svg")
+			.attr("width", 050)
+			.attr("x", 0.25*width-100)
+			.attr("y",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Boys2000"})[0].Value)-25)
+			.style("stroke","#788393"); 
+		
+		chart.append("svg:image")
+			.attr("class","icon")
+			.attr("xlink:href", "girls.svg")
+			.attr("width", 40)
+			.attr("x", 0.75*width+60)
+			.attr("y",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Girls2018"})[0].Value)-25)
+			.style("stroke","#95E22E"); 
 	}
       
 

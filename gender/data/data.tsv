@@ -1,16 +1,61 @@
-jobs	Girl2018	Boys2018	Girls2000	Boys2000	total2018	Total2000
-Doctors	15.62	-6.00	11.00	-4.89	10.97	8.09
-Teachers	9.45	-4.59	11.12	-3.95	7.10	7.71
-Business managers	4.98	-6.69	3.05	-7.17	5.81	5.00
-Engineers	1.83	-7.68	1.16	-6.12	4.65	3.52
-Lawyers	4.56	-2.39	6.16	-3.87	3.51	5.07
-Police officers	2.25	-4.03	0.90	-1.87	3.11	1.36
-ICT professionals	0.86	-5.47	1.60	-6.77	3.08	4.06
-Nursing and midwives	4.48	-0.57	3.19	-0.14	2.59	1.74
-Designers	3.01	-1.93	1.98	-0.93	2.49	1.48
-Psychologists	3.67	-0.69	3.92	-0.43	2.23	2.26
-Architects	2.10	-2.25	1.26	-1.89	2.17	1.56
-Veterinarians	2.76	-1.03	2.92	-1.18	1.93	2.10
-Actors	1.42	-1.54	1.65	-1.04	1.48	1.36
-Motor vehicle mechanics	0.14	-2.79	0.07	-2.67	1.42	1.31
-Musical performers	1.02	-1.28	1.25	-1.41	1.14	1.33
+jobs	Cat	Value
+Doctors	Girls2018	15.62
+Teachers	Girls2018	9.45
+Business managers	Girls2018	4.98
+Engineers	Girls2018	1.83
+Lawyers	Girls2018	4.56
+Police officers	Girls2018	2.25
+ICT professionals	Girls2018	0.86
+Nursing and midwives	Girls2018	4.48
+Designers	Girls2018	3.01
+Psychologists	Girls2018	3.67
+Architects	Girls2018	2.1
+Veterinarians	Girls2018	2.76
+Actors	Girls2018	1.42
+Motor vehicle mechanics	Girls2018	0.14
+Musical performers	Girls2018	1.02
+Doctors	Boys2018	6
+Teachers	Boys2018	4.59
+Business managers	Boys2018	6.69
+Engineers	Boys2018	7.68
+Lawyers	Boys2018	2.39
+Police officers	Boys2018	4.03
+ICT professionals	Boys2018	5.47
+Nursing and midwives	Boys2018	0.57
+Designers	Boys2018	1.93
+Psychologists	Boys2018	0.69
+Architects	Boys2018	2.25
+Veterinarians	Boys2018	1.03
+Actors	Boys2018	1.54
+Motor vehicle mechanics	Boys2018	2.79
+Musical performers	Boys2018	1.28
+Doctors	Girls2000	11
+Teachers	Girls2000	11.12
+Business managers	Girls2000	3.05
+Engineers	Girls2000	1.16
+Lawyers	Girls2000	6.16
+Police officers	Girls2000	0.9
+ICT professionals	Girls2000	1.6
+Nursing and midwives	Girls2000	3.19
+Designers	Girls2000	1.98
+Psychologists	Girls2000	3.92
+Architects	Girls2000	1.26
+Veterinarians	Girls2000	2.92
+Actors	Girls2000	1.65
+Motor vehicle mechanics	Girls2000	0.07
+Musical performers	Girls2000	1.25
+Doctors	Boys2000	4.89
+Teachers	Boys2000	3.95
+Business managers	Boys2000	7.17
+Engineers	Boys2000	6.12
+Lawyers	Boys2000	3.87
+Police officers	Boys2000	1.87
+ICT professionals	Boys2000	6.77
+Nursing and midwives	Boys2000	0.14
+Designers	Boys2000	0.93
+Psychologists	Boys2000	0.43
+Architects	Boys2000	1.89
+Veterinarians	Boys2000	1.18
+Actors	Boys2000	1.04
+Motor vehicle mechanics	Boys2000	2.67
+Musical performers	Boys2000	1.41
