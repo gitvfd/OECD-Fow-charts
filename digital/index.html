@@ -103,7 +103,7 @@
 
 	function setDropdown(data) {
 		
-		document.getElementById("chart_dropdown").innerHTML = "<option value=\"OECD\" selected=\"selected\">OECD</option>";
+		//document.getElementById("chart_dropdown").innerHTML = "<option value=\"OECD\" selected=\"selected\">OECD</option>";
 		
 		var tempCou=[];
 
@@ -121,6 +121,10 @@
 
 				var x = document.getElementById("chart_dropdown");
 				var option = document.createElement("option");
+
+				if(d.Country=="OECD")
+					option.selected="selected";
+
 				option.value = d.Country;
 				option.innerHTML = d.Country;
 				x.appendChild(option);

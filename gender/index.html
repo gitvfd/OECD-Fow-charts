@@ -84,7 +84,7 @@
 
 	function setDropdown(data) {
 		
-		document.getElementById("chart_dropdown").innerHTML = "<option value=\"Doctors\" selected=\"selected\">Doctors</option>";
+		//document.getElementById("chart_dropdown").innerHTML = "<option value=\"Doctors\" selected=\"selected\">Doctors</option>";
 		
 		var tempCou=[];
 
@@ -102,6 +102,9 @@
 
 				var x = document.getElementById("chart_dropdown");
 				var option = document.createElement("option");
+
+				if(d.jobs=="Doctors")
+					option.selected="selected";
 				option.value = d.jobs;
 				option.innerHTML = d.jobs;
 				x.appendChild(option);
@@ -117,9 +120,8 @@
 		
 		//define min and max value for axis
 		var min= d3.min(data,function(d){return parseFloat(d.Value)})
-  		var max= d3.max(data,function(d){return parseFloat(d.Value)})
-  console.log(min)
-  console.log(max)
+		var max= d3.max(data,function(d){return parseFloat(d.Value)})
+		  
 		y.domain([max,min])
 
 		//Draw Axis
