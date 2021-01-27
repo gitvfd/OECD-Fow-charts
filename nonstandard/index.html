@@ -30,13 +30,13 @@
 		</div>
 	</div>
 	<div id="chart"></div>
-	<!--<div id="backgroundInfo">
-			<img class="item" src="icon.svg" height="75px"  />
-		<div class="item" > <b>Advantaged school</b>: average socio-economic status of the school's students in the top quarter of the PISA index of economic, social and cultural status by country.<br><br><b>Disadvantaged school</b>: average socio-economic status of the school's students in the bottom quarter of the PISA index of economic, social and cultural status by country.</div>
-	</div>-->
+	<div id="backgroundInfo">
+		<img class="item" src="icon.svg" height="100px"  />
+		<div class="item" > <b>Non-standard worker</b>: mostly part-time work, mostly self-employed, or interrupted work patterns in the past two years. </div>
+	</div>
 	<br/>
 	<div id="source">
-		<i>Source</i>: OECD (2020a), "Learning remotely when school close: How well are students and school prepared? Insights from PISA".
+		<i>Source</i>: OECD (2020), OECD Economic Outlook, Volume 2020 Issue 1 : Preliminary version. 
 	</div>
 	
 </body>
@@ -53,7 +53,7 @@
     var format = d3.format(",.1f");
     var margin = 20,centered;
 
-	var fixedHeight=200;
+	var fixedHeight=180;
 
 	var width=document.getElementById("chart").offsetWidth
 	 
@@ -81,14 +81,14 @@
 	.attr("y",2.5*height/3)
 	.attr("class","legend")
 	.attr("text-anchor","end")
-	.text("All students have access")
+	.text("Full non-standard employment")
 
 	chart.append("text")
 	.attr("x",margin)
 	.attr("y",2.5*height/3)
 	.attr("class","legend")
 	.attr("text-anchor","start")
-	.text("No students have access");
+	.text("No non-standard employment");
 	//end legend
 
 
@@ -121,7 +121,7 @@
 				var x = document.getElementById("chart_dropdown");
 				var option = document.createElement("option");
 
-				if(d.Country=="Luxembourg")
+				if(d.Country=="Austria")
 					option.selected="selected";
 				option.value = d.Country;
 				option.innerHTML = d.Country;

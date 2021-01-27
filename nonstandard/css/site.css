@@ -147,8 +147,9 @@ div.tooltip {
 }
 
 .item {
-  height: 100px;
-  margin: 10px;
+  /*height: 75px;*/
+  margin-right: 20px;
+  margin-left: 20px;
   font-family: 'Barlow', sans-serif;
 }
 
