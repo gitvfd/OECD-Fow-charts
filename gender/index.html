@@ -19,8 +19,8 @@
 
 <body>
 <div id="interactiveViz">
-	<div id="title">occupations cited by gender (top 15)</div>
-	<div id="subtitle"></div>
+	<div id="title">Where do you expect to work?</div>
+	<div id="subtitle">% of students expecting to work in one of the 15 most cited jobs by gender</div>
 	<br/>
 	<div id="modedemploi">
 		<div id="selChart">
@@ -222,7 +222,7 @@
 							return  "start"; 	
 			})
 			.text(function(d){
-							return  d.Value;		
+							return  d.Value+"%";		
 		  })
 		  
 		chart.append("svg:image")
@@ -312,7 +312,7 @@
 							return  "start"; 	
 			})
 			.text(function(d){
-							return  d.Value;		
+							return  d.Value+"%";		
 		  })
 
 
