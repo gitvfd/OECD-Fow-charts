@@ -106,9 +106,10 @@
 		document.getElementById("chart_dropdown").innerHTML = "<option value=\"OECD\" selected=\"selected\">OECD</option>";
 		
 		var tempCou=[];
-		var boolean=false;
 
 		data.forEach(function (d) {
+
+			var boolean=false;
 			tempCou.forEach(function (k) {
 				if(d.Country==k){
 					boolean=true;

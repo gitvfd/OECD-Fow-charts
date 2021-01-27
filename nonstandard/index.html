@@ -20,8 +20,8 @@
 
 <body>
 <div id="interactiveViz">
-	<div id="title">Accessing digital learning</div>
-	<div id="subtitle">% of student with access to a computer at home for school work</div>
+	<div id="title">Non standard workers make up a large share of the employment in the most affected sectors</div>
+	<div id="subtitle">% of employment in respective sectors, 2018</div>
 	<br/>
 	<div id="modedemploi">
 		<div id="selChart">
@@ -31,10 +31,10 @@
 		</div>
 	</div>
 	<div id="chart"></div>
-	<div id="backgroundInfo">
+	<!--<div id="backgroundInfo">
 			<img class="item" src="icon.svg" height="75px"  />
 		<div class="item" > <b>Advantaged school</b>: average socio-economic status of the school's students in the top quarter of the PISA index of economic, social and cultural status by country.<br><br><b>Disadvantaged school</b>: average socio-economic status of the school's students in the bottom quarter of the PISA index of economic, social and cultural status by country.</div>
-	</div>
+	</div>-->
 	<br/>
 	<div id="source">
 		<i>Source</i>: OECD (2020a), "Learning remotely when school close: How well are students and school prepared? Insights from PISA".
@@ -103,13 +103,14 @@
 
 	function setDropdown(data) {
 		
-		document.getElementById("chart_dropdown").innerHTML = "<option value=\"OECD\" selected=\"selected\">OECD</option>";
+		document.getElementById("chart_dropdown").innerHTML = "<option value=\"Austria\" selected=\"selected\">Austria</option>";
 		
 		var tempCou=[];
-		var boolean=false;
 
 		data.forEach(function (d) {
+			var boolean=false;
 			tempCou.forEach(function (k) {
+			console.log(boolean)
 				if(d.Country==k){
 					boolean=true;
 				}
@@ -133,34 +134,41 @@
 		data=dataTemp;
 		setDropdown(dataTemp)
 		
-
 			  
 		svg.append('g')
 			.attr('class', 'xAxis')
 			.call(xAxis)
 			.attr('transform', 'translate('+[0, 1.1*height/2+20] +')');
 
+		chart.append("line")
+			.attr("class","joinLine")
+			.attr("x1",x(data.filter(function(d) { return d.Country=="Austria" && d.Sector=="Total of most affected sectors"})[0].Value))
+			.attr("y1",1*height/2)
+			.attr("x2",x(data.filter(function(d) { return d.Country=="Austria" && d.Sector!="Total of most affected sectors"})[0].Value))
+			.attr("y2",1*height/2)
+	      	.style("stroke", "#22222B")
+			  .style("stroke-width","2px");	
+
+
 		var circleGroup = chart.selectAll("g")
 		    .data(data)
 		    .enter()
 		    .append("g")
-      		.filter(function(d) { return d.Country=="OECD" })
-		   
+      		.filter(function(d) { return d.Country=="Austria" })
+		  
+
 		circleGroup.append("circle")
 		    .attr("cx",function(d){
-		    	if(d.value!=="")
 		    		return x(parseFloat(d.Value));})
 		    .attr("cy",1*height/2)
 			.attr("r", function(d){
 					return 12;
 			})
 			.style("fill",function(d){
-				if(d.Cat=="Disadvantaged_schools")
+				if(d.Sector=="Total of most affected sectors")
 					return "#95E22E"
-				else if (d.Cat=="Avg")
+				else
 					return "#788393"
-			else if (d.Cat=="Advantaged_schools")
-					return "#22222B"
 			})
 			.on('mouseover', function (d) {
 				d3.select(this).attr("opacity",0.5)
@@ -169,15 +177,7 @@
 					.style("opacity", 1);
 	
 					var htmlText;
-					if(d.Cat=="Disadvantaged_schools" )	
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Disadvantaged schools: "+ format(d.Value) +"%";
-
-					else if(d.Cat=="Advantaged_schools" )
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Advantaged schools: "+ format(d.Value) +"%";
-
-					else if(d.Cat=="Avg" )
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Average: "+ format(d.Value) +"%";
-
+						 htmlText = "<b>" + d.Country + "</b><br/><br/>"+ d.Sector + ": "+ format(d.Value) +"%";
 
 				divMap.html(htmlText)
 					.style("left", event.pageX - document.body.scrollLeft + "px")
@@ -201,63 +201,63 @@
 		circleGroup.append("text")
 			.attr("class","label")
 			.attr("dx", function(d){
-					if(d.Cat=="Disadvantaged_schools" )
+					if(d.Sector=="Total of most affected sectors" )
 				    		return  x(parseFloat(d.Value)) + 12;
-					else if(d.Cat=="Advantaged_schools" )
+					else 
 							return  x(parseFloat(d.Value)) - 12;
-					else if(d.Cat=="Avg" )
-							return  x(parseFloat(d.Value)) ;
 			})
 			.attr("dy",height/2-20)
 			.style("font-weight",300)
 			.style("text-anchor",function(d){
 
-					if(d.Cat=="Disadvantaged_schools" )
+					if(d.Sector=="Total of most affected sectors" )
 				    		return  "end";
-					else if(d.Cat=="Advantaged_schools" )
+					else 
 							return  "start";
-					else if(d.Cat=="Avg" )
-							return  "middle";
 				  	
 			})
 			.text(function(d){
-					if(d.Cat=="Disadvantaged_schools" )
-				    		return  "Disadvantaged schools";
-					else if(d.Cat=="Advantaged_schools" )
-							return  "Advantaged schools";
-					else if(d.Cat=="Avg" )
-							return  "average";
+							return  d.Sector;
 					
 	      })
 
 	};
 
 	function update(countrySel){
-		chart.selectAll('g')
-			.remove();
-			chart.selectAll('circle')
-			.remove();
-			var circleGroup = chart.selectAll("g")
+
+		chart.selectAll('g').remove()
+
+		chart.selectAll('line').remove()
+
+		chart.append("line")
+			.attr("class","joinLine")
+			.attr("x1",x(data.filter(function(d) { return d.Country==countrySel && d.Sector=="Total of most affected sectors"})[0].Value))
+			.attr("y1",1*height/2)
+			.attr("x2",x(data.filter(function(d) { return d.Country==countrySel && d.Sector!="Total of most affected sectors"})[0].Value))
+			.attr("y2",1*height/2)
+	      	.style("stroke", "#22222B")
+			  .style("stroke-width","2px");	
+
+
+		var circleGroup = chart.selectAll("g")
 		    .data(data)
 		    .enter()
 		    .append("g")
       		.filter(function(d) { return d.Country==countrySel })
-		   
+		  
+
 		circleGroup.append("circle")
 		    .attr("cx",function(d){
-		    	if(d.value!=="")
 		    		return x(parseFloat(d.Value));})
 		    .attr("cy",1*height/2)
 			.attr("r", function(d){
 					return 12;
 			})
 			.style("fill",function(d){
-				if(d.Cat=="Disadvantaged_schools")
+				if(d.Sector=="Total of most affected sectors")
 					return "#95E22E"
-				else if (d.Cat=="Avg")
+				else
 					return "#788393"
-			else if (d.Cat=="Advantaged_schools")
-					return "#22222B"
 			})
 			.on('mouseover', function (d) {
 				d3.select(this).attr("opacity",0.5)
@@ -266,16 +266,9 @@
 					.style("opacity", 1);
 	
 					var htmlText;
-					if(d.Cat=="Disadvantaged_schools" )	
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Disadvantaged schools: "+ format(d.Value) +"%";
+						 htmlText = "<b>" + d.Country + "</b><br/><br/>"+ d.Sector + ": "+ format(d.Value) +"%";
 
-					else if(d.Cat=="Advantaged_schools" )
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Advantaged schools: "+ format(d.Value) +"%";
-
-					else if(d.Cat=="Avg" )
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Average: "+ format(d.Value) +"%";
-				
-						 divMap.html(htmlText)
+				divMap.html(htmlText)
 					.style("left", event.pageX - document.body.scrollLeft + "px")
 					.style("top", event.pageY /*- document.body.scrollTop*/ + "px");
 				})
@@ -293,36 +286,30 @@
 					.style("opacity", 0);
 			})
 
+
 		circleGroup.append("text")
 			.attr("class","label")
 			.attr("dx", function(d){
-					if(d.Cat=="Disadvantaged_schools" )
+					if(d.Sector=="Total of most affected sectors" )
 				    		return  x(parseFloat(d.Value)) + 12;
-					else if(d.Cat=="Advantaged_schools" )
+					else 
 							return  x(parseFloat(d.Value)) - 12;
-					else if(d.Cat=="Avg" )
-							return  x(parseFloat(d.Value)) ;
 			})
 			.attr("dy",height/2-20)
 			.style("font-weight",300)
 			.style("text-anchor",function(d){
 
-					if(d.Cat=="Disadvantaged_schools" )
+					if(d.Sector=="Total of most affected sectors" )
 				    		return  "end";
-					else if(d.Cat=="Advantaged_schools" )
+					else 
 							return  "start";
-					else if(d.Cat=="Avg" )
-							return  "middle";
 				  	
 			})
 			.text(function(d){
-					if(d.Cat=="Disadvantaged_schools" )
-				    		return  "Disadvantaged schools";
-					else if(d.Cat=="Advantaged_schools" )
-							return  "Advantaged schools";
-					else if(d.Cat=="Avg" )
-							return  "average";
+							return  d.Sector;
+					
 	      })
+
 	}
       
 
@@ -339,22 +326,6 @@
 	    // resize the map container
 	    svg.attr('width', width + 'px')
 	        .attr('height', height + 'px');
-
-	    // resize the map
-	    //worldMap.selectAll('.world').attr('d', path);
-	    //world.selectAll('.state').attr('d', path);
-	    
-
-	    worldMap.selectAll('circle')
-			.attr("cx", function (d) {
-
-				return projection([d.lng, d.lat])[0];
-			})
-			.attr("cy", function (d) {
-
-				return projection([d.lng, d.lat])[1];
-			})
-	      	.attr("r",width/375);
 
 		
 	

@@ -87,9 +87,10 @@
 		document.getElementById("chart_dropdown").innerHTML = "<option value=\"Doctors\" selected=\"selected\">Doctors</option>";
 		
 		var tempCou=[];
-		var boolean=false;
 
 		data.forEach(function (d) {
+
+			var boolean=false;
 			tempCou.forEach(function (k) {
 				if(d.jobs==k){
 					boolean=true;
