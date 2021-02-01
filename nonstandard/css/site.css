@@ -99,6 +99,7 @@ div.tooltip {
 #chart_dropdown{
   margin-left: auto;
   margin-right: auto;
+  width:100%;
   max-width: 400px;
   display:inline;
   font-family: 'Barlow', sans-serif;
