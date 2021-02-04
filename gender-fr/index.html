@@ -1,0 +1,369 @@
+<doctype HTML>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<head>
+	<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Permanent+Marker&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/site.css">
+
+<script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+	crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+ <script src="libs/d3.v4.min.js"></script>
+	<script src="libs/d3.v4.jetpack.min.js"></script>
+	<script src="libs/d3-queue.v3.min.js"></script>
+
+
+</head>
+
+<body>
+<div id="interactiveViz">
+	<div id="title">What do you expect to do for a job?</div>
+	<div id="subtitle">Select 1 of 15 popular jobs below and see what % of girls and boys expect to do it as well as how this has changed since 2000</div>
+	<br/>
+	<div id="modedemploi">
+		<div id="selChart">
+			<select id="chart_dropdown" onchange="update(value)">
+			</select>
+		</div>
+	</div>
+	<div id="chart"></div>
+	
+	<br/>
+	<div id="source">
+		<i>Source</i>: OECD (2020), Dream jobs? - Teenagers' career aspirations and the future of work
+	</div>
+	
+</body>
+<script type="text/javascript">
+
+	$(document).ready(function () {
+		$('#chart_dropdown').select2({ width: '500px' });
+	});
+
+	var urls = {
+	    data:"data/data.tsv"
+	};
+
+
+	var divMap = d3.select("body").append("div")
+		.attr("class", "tooltip")
+		.style("opacity", 0);
+
+
+    var format = d3.format(",.1f");
+    var margin = 20,centered;
+
+	var fixedHeight=350;
+
+	var width=document.getElementById("chart").offsetWidth
+	 
+	var height= fixedHeight;
+
+  	const svg= d3.select("#chart").append("svg")
+  	    .attr("width", width)
+  	    .attr("height", height )
+
+	var baseline=svg.append("g");
+
+	var chart=svg.append("g");
+	
+    var annotationLayer=svg.append("g");
+
+	var data=[];
+
+
+	var y = d3.scaleLinear()
+		.rangeRound([3*margin, height-1*margin]);
+
+	d3.queue()
+	    .defer(d3.tsv, urls.data)
+	    .await(render);
+
+	function setDropdown(data) {
+		
+		//document.getElementById("chart_dropdown").innerHTML = "<option value=\"Doctors\" selected=\"selected\">Doctors</option>";
+		
+		var tempCou=[];
+
+		data.forEach(function (d) {
+
+			var boolean=false;
+			tempCou.forEach(function (k) {
+				if(d.jobs==k){
+					boolean=true;
+				}
+			})
+
+			if(!boolean){
+				tempCou.push(d.jobs)
+
+				var x = document.getElementById("chart_dropdown");
+				var option = document.createElement("option");
+
+				if(d.jobs=="Doctors")
+					option.selected="selected";
+				option.value = d.jobs;
+				option.innerHTML = d.jobs;
+				x.appendChild(option);
+			}
+
+		})
+	}
+
+		
+	function render(err,dataTemp){
+		data=dataTemp;
+		setDropdown(dataTemp)
+		
+		//define min and max value for axis
+		var min= d3.min(data,function(d){return parseFloat(d.Value)})
+		var max= d3.max(data,function(d){return parseFloat(d.Value)})
+		  
+		y.domain([max,min])
+
+		//Draw Axis
+		baseline.append("line")
+			.attr("id","axis2000")
+			.attr("x1",0.25*width)
+			.attr("y1",3*margin)
+			.attr("x2",0.25*width)
+			.attr("y2",height-margin)
+	      	.style("stroke", "#22222B")
+			  .style("stroke-width","1.5px");
+			  
+		
+		baseline.append("line")
+			.attr("id","axis2018")
+			.attr("x1",0.75*width)
+			.attr("y1",3*margin)
+			.attr("x2",0.75*width)
+			.attr("y2",height-margin)
+	      	.style("stroke", "#22222B")
+	      	.style("stroke-width","1.5px");
+	
+		baseline.append("text")
+			.attr("id","axistext2000")
+			.attr("dx",0.25*width)
+			.attr("dy",2*margin)
+			.style("font-weight",700)
+			.style("text-anchor","middle")
+			.text("2000")
+		
+		baseline.append("text")
+			.attr("id","axistext2018")
+			.attr("dx",0.75*width)
+			.attr("dy",2*margin)
+			.style("font-weight",700)
+			.style("text-anchor","middle")
+			.text("2018")
+			  
+		var circleGroup = chart.selectAll("g")
+		    .data(data)
+		    .enter()
+		    .append("g")
+			  .filter(function(d) { return d.jobs=="Doctors"})
+			  
+
+		circleGroup.append("line")
+			.attr("class","joinLine")
+			.attr("x1",0.25*width)
+			.attr("y1",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Boys2000"})[0].Value))
+			.attr("x2",0.75*width)
+			.attr("y2",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Boys2018"})[0].Value))
+	      	.style("stroke", "#788393")
+			  .style("stroke-width","2px");
+			  
+		circleGroup.append("line")
+			.attr("class","joinLine")
+			.attr("x1",0.25*width)
+			.attr("y1",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Girls2000"})[0].Value))
+			.attr("x2",0.75*width)
+			.attr("y2",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Girls2018"})[0].Value))
+	      	.style("stroke", "#95E22E")
+			  .style("stroke-width","2px");
+		
+	   circleGroup.append("circle")
+		    .attr("cx",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+					return 0.25*width;
+				else
+					return 0.75*width
+			})
+			.attr("cy",function(d){
+				return (y(d.Value))
+			})
+			
+			.attr("r", function(d){
+					return 12;
+			})
+			.style("fill",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Girls2018")
+					return "#95E22E";
+				else
+					return "#788393";
+			})  
+
+		circleGroup.append("text")
+			.attr("class","label")
+			.attr("dx", function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+					return 0.25*width-20;
+				else
+					return 0.75*width+20;
+			})
+			.attr("dy",function(d){
+				return (y(d.Value))+3
+			})
+			.style("font-weight",300)
+			.style("text-anchor",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+				    		return  "end";
+					else 
+							return  "start"; 	
+			})
+			.text(function(d){
+							return  d.Value+"%";		
+		  })
+		  
+		chart.append("svg:image")
+			.attr("class","icon")
+			.attr("xlink:href", "boys.svg")
+			.attr("width", 050)
+			.attr("x", 0.25*width-100)
+			.attr("y",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Boys2000"})[0].Value)-25)
+			.style("stroke","#788393"); 
+		
+		chart.append("svg:image")
+			.attr("class","icon")
+			.attr("xlink:href", "girls.svg")
+			.attr("width", 40)
+			.attr("x", 0.75*width+60)
+			.attr("y",y(data.filter(function(d) { return d.jobs=="Doctors" && d.Cat=="Girls2018"})[0].Value)-25)
+			.style("stroke","#95E22E"); 
+
+	};
+
+	function update(jobSel){
+
+		chart.selectAll('g').remove()
+
+		chart.selectAll('.icon').remove()
+		var circleGroup = chart.selectAll("g")
+		    .data(data)
+		    .enter()
+		    .append("g")
+      		.filter(function(d) { return d.jobs==jobSel})
+		
+
+		circleGroup.append("line")
+			.attr("class","joinLine")
+			.attr("x1",0.25*width)
+			.attr("y1",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Boys2000"})[0].Value))
+			.attr("x2",0.75*width)
+			.attr("y2",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Boys2018"})[0].Value))
+	      	.style("stroke", "#788393")
+			  .style("stroke-width","2px");
+			  
+		circleGroup.append("line")
+			.attr("class","joinLine")
+			.attr("x1",0.25*width)
+			.attr("y1",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Girls2000"})[0].Value))
+			.attr("x2",0.75*width)
+			.attr("y2",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Girls2018"})[0].Value))
+	      	.style("stroke", "#95E22E")
+			  .style("stroke-width","2px");
+	 
+		circleGroup.append("circle")
+		    .attr("cx",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+					return 0.25*width;
+				else
+					return 0.75*width
+			})
+			.attr("cy",function(d){
+				return (y(d.Value))
+			})
+			
+			.attr("r", function(d){
+					return 12;
+			})
+			.style("fill",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Girls2018")
+					return "#95E22E";
+				else
+					return "#788393";
+			})  
+		circleGroup.append("text")
+			.attr("class","label")
+			.attr("dx", function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+					return 0.25*width-20;
+				else
+					return 0.75*width+20;
+			})
+			.attr("dy",function(d){
+				return (y(d.Value))+3
+			})
+			.style("font-weight",300)
+			.style("text-anchor",function(d){
+		    	if(d.Cat=="Girls2000"||d.Cat=="Boys2000")
+				    		return  "end";
+					else 
+							return  "start"; 	
+			})
+			.text(function(d){
+							return  d.Value+"%";		
+		  })
+
+
+		chart.append("svg:image")
+			.attr("class","icon")
+			.attr("xlink:href", "boys.svg")
+			.attr("width", 050)
+			.attr("x", 0.25*width-100)
+			.attr("y",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Boys2000"})[0].Value)-25)
+			.style("stroke","#788393"); 
+		
+		chart.append("svg:image")
+			.attr("class","icon")
+			.attr("xlink:href", "girls.svg")
+			.attr("width", 40)
+			.attr("x", 0.75*width+60)
+			.attr("y",y(data.filter(function(d) { return d.jobs==jobSel && d.Cat=="Girls2018"})[0].Value)-25)
+			.style("stroke","#95E22E"); 
+	}
+      
+
+
+	d3.select(window).on('resize', resize);
+
+	function resize() {
+	    // adjust things when the window size changes
+	    width = document.getElementById("chart").offsetWidth,
+	    height = fixedHeight//width * mapRatio;
+
+
+
+	    // resize the map container
+	    chart.attr('width', width + 'px')
+	        .attr('height', height + 'px');
+
+	
+
+	}
+
+    
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51983915-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
