@@ -20,8 +20,9 @@
 
 <body>
 <div id="interactiveViz">
-	<div id="title">Les travailleurs «atypiques» sont plus susceptibles d'être employés dans les secteurs les plus durement touchés par les mesures COVID-19 </div>
-	<div id="subtitle">% d'emplois dans le secteur par pays, 2018 </div>
+	<div id="title">Los trabajadores "no convenciionales" tienen màs probabilidad de tener empleo en los sectores más duramente afectados
+	por las medidas contra el COVID-19</div>
+	<div id="subtitle">% de empleos en el sector por países, 2018</div>
 	<br/>
 	<div id="modedemploi">
 		<div id="selChart">
@@ -32,11 +33,11 @@
 	<div id="chart"></div>
 	<div id="backgroundInfo">
 		<img class="item" src="icon.svg" height="100px"  />
-		<div class="item" >Les jeunes occupent souvent des emplois atypiques tels que le travail à temps partiel ou temporaire, le travail indépendant.  </div>
+		<div class="item" >Los jóvenes ejercen con frecuencia empleos no convencionales, como trabajo a tiempo parcial o temporal, o autoempleo</div>
 	</div>
 	<br/>
 	<div id="source">
-		<i>Source</i>: OCDE (2020), Perspectives économiques de l'OCDE, Volume 2020 Numéro 1: version préliminaire. 
+		<i>Fuente</i>: OCDE (2020), OECD Economic Outlook, Volumen 2020 Número 1 : Versión preliminar.
 	</div>
 	
 </body>
@@ -81,14 +82,14 @@
 	.attr("y",2.5*height/3)
 	.attr("class","legend")
 	.attr("text-anchor","end")
-	.text("Tous les emplois sont atypiques")
+	.text("Pleno empleo no convencional")
 
 	chart.append("text")
 	.attr("x",margin)
 	.attr("y",2.5*height/3)
 	.attr("class","legend")
 	.attr("text-anchor","start")
-	.text("Pas d'emploi atypique ");
+	.text("Ningún empleo no convenciona");
 	//end legend
 
 
@@ -121,7 +122,7 @@
 				var x = document.getElementById("chart_dropdown");
 				var option = document.createElement("option");
 
-				if(d.Country=="Autriche")
+				if(d.Country=="Alemania")
 					option.selected="selected";
 				option.value = d.Country;
 				option.innerHTML = d.Country;
@@ -144,9 +145,9 @@
 
 		chart.append("line")
 			.attr("class","joinLine")
-			.attr("x1",x(data.filter(function(d) { return d.Country=="Autriche" && d.Sector=="Total des secteurs les plus touchés"})[0].Value))
+			.attr("x1",x(data.filter(function(d) { return d.Country=="Alemania" && d.Sector=="Total de sectores más afectados"})[0].Value))
 			.attr("y1",1*height/2)
-			.attr("x2",x(data.filter(function(d) { return d.Country=="Autriche" && d.Sector!="Total des secteurs les plus touchés"})[0].Value))
+			.attr("x2",x(data.filter(function(d) { return d.Country=="Alemania" && d.Sector!="Total de sectores más afectados"})[0].Value))
 			.attr("y2",1*height/2)
 	      	.style("stroke", "#22222B")
 			  .style("stroke-width","2px");	
@@ -156,7 +157,7 @@
 		    .data(data)
 		    .enter()
 		    .append("g")
-      		.filter(function(d) { return d.Country=="Autriche" })
+      		.filter(function(d) { return d.Country=="Alemania" })
 		  
 
 		circleGroup.append("circle")
@@ -167,7 +168,7 @@
 					return 12;
 			})
 			.style("fill",function(d){
-				if(d.Sector=="Total des secteurs les plus touchés")
+				if(d.Sector=="Total de sectores más afectados")
 					return "#95E22E"
 				else
 					return "#788393"
@@ -203,7 +204,7 @@
 		circleGroup.append("text")
 			.attr("class","label")
 			.attr("dx", function(d){
-					if(d.Sector=="Total des secteurs les plus touchés" )
+					if(d.Sector=="Total de sectores más afectados" )
 				    		return  x(parseFloat(d.Value)) + 12;
 					else 
 							return  x(parseFloat(d.Value)) - 12;
@@ -212,7 +213,7 @@
 			.style("font-weight",300)
 			.style("text-anchor",function(d){
 
-					if(d.Sector=="Total des secteurs les plus touchés" )
+					if(d.Sector=="Total de sectores más afectados" )
 				    		return  "end";
 					else 
 							return  "start";
@@ -233,9 +234,9 @@
 
 		chart.append("line")
 			.attr("class","joinLine")
-			.attr("x1",x(data.filter(function(d) { return d.Country==countrySel && d.Sector=="Total des secteurs les plus touchés"})[0].Value))
+			.attr("x1",x(data.filter(function(d) { return d.Country==countrySel && d.Sector=="Total de sectores más afectados"})[0].Value))
 			.attr("y1",1*height/2)
-			.attr("x2",x(data.filter(function(d) { return d.Country==countrySel && d.Sector!="Total des secteurs les plus touchés"})[0].Value))
+			.attr("x2",x(data.filter(function(d) { return d.Country==countrySel && d.Sector!="Total de sectores más afectados"})[0].Value))
 			.attr("y2",1*height/2)
 	      	.style("stroke", "#22222B")
 			  .style("stroke-width","2px");	
@@ -256,7 +257,7 @@
 					return 12;
 			})
 			.style("fill",function(d){
-				if(d.Sector=="Total des secteurs les plus touchés")
+				if(d.Sector=="Total de sectores más afectados")
 					return "#95E22E"
 				else
 					return "#788393"
@@ -292,7 +293,7 @@
 		circleGroup.append("text")
 			.attr("class","label")
 			.attr("dx", function(d){
-					if(d.Sector=="Total des secteurs les plus touchés" )
+					if(d.Sector=="Total de sectores más afectados" )
 				    		return  x(parseFloat(d.Value)) + 12;
 					else 
 							return  x(parseFloat(d.Value)) - 12;
@@ -301,7 +302,7 @@
 			.style("font-weight",300)
 			.style("text-anchor",function(d){
 
-					if(d.Sector=="Total des secteurs les plus touchés" )
+					if(d.Sector=="Total de sectores más afectados" )
 				    		return  "end";
 					else 
 							return  "start";
