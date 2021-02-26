@@ -20,8 +20,8 @@
 
 <body>
 <div id="interactiveViz">
-	<div id="title">Tous les élèves ne disposent pas d'un ordinateur à la maison, en particulier ceux des écoles défavorisées </div>
-	<div id="subtitle">% d'élèves ayant accès à un ordinateur à la maison pour les travaux scolaires </div>
+	<div id="title">No todos los estudiantes tienen una computadora en casa, especialmente aquellos que están en escuelas desfavorecidas </div>
+	<div id="subtitle">% de estudiantes con acceso a una computadora en casa para trabajo escolar</div>
 	<br/>
 	<div id="modedemploi">
 		<div id="selChart">
@@ -32,7 +32,7 @@
 	<div id="chart"></div>
 	<div id="backgroundInfo">
 			<img class="item" src="icon.svg" height="75px"  />
-		<div class="item" > <b>École favorisée </b>: statut socio-économique moyen des élèves de l'école dans le quart supérieur de l'indice PISA du statut économique, social et culturel par pays. <br> <br> <b> Ecole défavorisée </b>: statut socio-économique moyen du élèves de l'école dans le quart inférieur de l'indice PISA du statut économique, social et culturel par pays. </div>
+		<div class="item" > <b>Escuela privilegiada </b>: situación promedio socioeconómica  de los estudiantes de la escuela en el 25% superior del índice PISA de nivel económico, social y cultural por países. <br> <br> <b> Escuela desfavorecida </b>: situación promedio socioeconómica  de los estudiantes de la escuela en el 25% inferior del índice PISA de nivel económico, social y cultural por países. </div>
 	</div>
 	<br/>
 	<div id="source">
@@ -81,14 +81,14 @@
 	.attr("y",2.5*height/3)
 	.attr("class","legend")
 	.attr("text-anchor","end")
-	.text("Tous les étudiants ont accès")
+	.text("Todos los estudiantes tienen acceso")
 
 	chart.append("text")
 	.attr("x",margin)
 	.attr("y",2.5*height/3)
 	.attr("class","legend")
 	.attr("text-anchor","start")
-	.text("Aucun étudiant a accès");
+	.text("Ningún estudiante tiene acceso");
 	//end legend
 
 
@@ -174,13 +174,13 @@
 	
 					var htmlText;
 					if(d.Cat=="Disadvantaged_schools" )	
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Ecoles défavorisées: "+ format(d.Value) +"%";
+						 htmlText = "<b>" + d.Country + "</b><br/><br/> Escuelas desfavorecidas: "+ format(d.Value) +"%";
 
 					else if(d.Cat=="Advantaged_schools" )
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Ecoles favorisées: "+ format(d.Value) +"%";
+						 htmlText = "<b>" + d.Country + "</b><br/><br/> Escuelas privilegiadas: "+ format(d.Value) +"%";
 
 					else if(d.Cat=="Avg" )
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Moyenne: "+ format(d.Value) +"%";
+						 htmlText = "<b>" + d.Country + "</b><br/><br/> Promedio: "+ format(d.Value) +"%";
 
 
 				divMap.html(htmlText)
@@ -226,11 +226,11 @@
 			})
 			.text(function(d){
 					if(d.Cat=="Disadvantaged_schools" )
-				    		return  "écoles défavorisées";
+				    		return  "Escuelas desfavorecidas";
 					else if(d.Cat=="Advantaged_schools" )
-							return  "écoles favorisées";
+							return  "Escuelas privilegiadas";
 					else if(d.Cat=="Avg" )
-							return  "moyenne";
+							return  "Promedio";
 					
 	      })
 
@@ -271,13 +271,13 @@
 	
 					var htmlText;
 					if(d.Cat=="Disadvantaged_schools" )	
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Ecoles défavorisées: "+ format(d.Value) +"%";
+						 htmlText = "<b>" + d.Country + "</b><br/><br/> Escuelas desfavorecidas: "+ format(d.Value) +"%";
 
 					else if(d.Cat=="Advantaged_schools" )
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Ecoles favorisées: "+ format(d.Value) +"%";
+						 htmlText = "<b>" + d.Country + "</b><br/><br/> Escuelas privilegiadas: "+ format(d.Value) +"%";
 
 					else if(d.Cat=="Avg" )
-						 htmlText = "<b>" + d.Country + "</b><br/><br/> Moyenne: "+ format(d.Value) +"%";
+						 htmlText = "<b>" + d.Country + "</b><br/><br/> Promedio: "+ format(d.Value) +"%";
 				
 						 divMap.html(htmlText)
 					.style("left", event.pageX - document.body.scrollLeft + "px")
@@ -321,11 +321,11 @@
 			})
 			.text(function(d){
 					if(d.Cat=="Disadvantaged_schools" )
-				    		return  "écoles défavorisées";
+				    		return  "Escuelas desfavorecidas";
 					else if(d.Cat=="Advantaged_schools" )
-							return  "écoles favorisées";
+							return  "Escuelas privilegiadas";
 					else if(d.Cat=="Avg" )
-							return  "moyenne";
+							return  "Promedio";
 	      })
 	}
       

@@ -19,8 +19,8 @@
 
 <body>
 <div id="interactiveViz">
-	<div id="title">De quel travail rêvez-vous? </div>
-	<div id="subtitle">Sélectionnez 1 des 15 emplois populaires ci-dessous et voyez quel pourcentage de filles et de garçons s'attendent à le faire ainsi que l'évolution des souhaits depuis 2000 </div>
+	<div id="title">¿Qué trabajo quisieras tener? </div>
+	<div id="subtitle">Selecciona uno de estos populares trabajos que aparecen a continuación y ve qué porcentaje de chicas y chicos esperan desempeñarlo y cómo ha cambiado esto desde 2000</div>
 	<br/>
 	<div id="modedemploi">
 		<div id="selChart">
@@ -32,7 +32,7 @@
 	
 	<br/>
 	<div id="source">
-		<i>Source</i>: OECD (2020), Dream jobs? - Teenagers' career aspirations and the future of work
+		<i>Fuente</i>: OECD (2020), Dream jobs? - Teenagers' career aspirations and the future of work
 	</div>
 	
 </body>
@@ -102,7 +102,7 @@
 				var x = document.getElementById("chart_dropdown");
 				var option = document.createElement("option");
 
-				if(d.jobs=="Docteurs")
+				if(d.jobs=="Doctores")
 					option.selected="selected";
 				option.value = d.jobs;
 				option.innerHTML = d.jobs;
@@ -163,24 +163,24 @@
 		    .data(data)
 		    .enter()
 		    .append("g")
-			  .filter(function(d) { return d.jobs=="Docteurs"})
+			  .filter(function(d) { return d.jobs=="Doctores"})
 			  
 
 		circleGroup.append("line")
 			.attr("class","joinLine")
 			.attr("x1",0.25*width)
-			.attr("y1",y(data.filter(function(d) { return d.jobs=="Docteurs" && d.Cat=="Boys2000"})[0].Value))
+			.attr("y1",y(data.filter(function(d) { return d.jobs=="Doctores" && d.Cat=="Boys2000"})[0].Value))
 			.attr("x2",0.75*width)
-			.attr("y2",y(data.filter(function(d) { return d.jobs=="Docteurs" && d.Cat=="Boys2018"})[0].Value))
+			.attr("y2",y(data.filter(function(d) { return d.jobs=="Doctores" && d.Cat=="Boys2018"})[0].Value))
 	      	.style("stroke", "#788393")
 			  .style("stroke-width","2px");
 			  
 		circleGroup.append("line")
 			.attr("class","joinLine")
 			.attr("x1",0.25*width)
-			.attr("y1",y(data.filter(function(d) { return d.jobs=="Docteurs" && d.Cat=="Girls2000"})[0].Value))
+			.attr("y1",y(data.filter(function(d) { return d.jobs=="Doctores" && d.Cat=="Girls2000"})[0].Value))
 			.attr("x2",0.75*width)
-			.attr("y2",y(data.filter(function(d) { return d.jobs=="Docteurs" && d.Cat=="Girls2018"})[0].Value))
+			.attr("y2",y(data.filter(function(d) { return d.jobs=="Doctores" && d.Cat=="Girls2018"})[0].Value))
 	      	.style("stroke", "#95E22E")
 			  .style("stroke-width","2px");
 		
